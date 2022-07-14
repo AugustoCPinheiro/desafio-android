@@ -8,6 +8,8 @@ apply plugin: 'kotlin-kapt'
 
 android {
     compileSdkVersion 29
+
+
     defaultConfig {
         applicationId "com.picpay.desafio.android"
         minSdkVersion 21
@@ -18,6 +20,8 @@ android {
         vectorDrawables.useSupportLibrary = true
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        buildConfigField "String", 'BASE_URL', '"https://609a908e0f5a13001721b74e.mockapi.io/picpay/api/"'
     }
     buildTypes {
         debug {}
@@ -37,6 +41,8 @@ android {
     kotlinOptions {
         jvmTarget = JavaVersion.VERSION_1_8.toString()
     }
+
+
 }
 
 dependencies {
@@ -54,9 +60,6 @@ dependencies {
     implementation "org.koin:koin-core:$koin_version"
     implementation "org.koin:koin-android:$koin_version"
     implementation "org.koin:koin-androidx-viewmodel:$koin_version"
-
-    implementation "com.google.dagger:dagger:$dagger_version"
-    kapt "com.google.dagger:dagger-compiler:$dagger_version"
 
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version"

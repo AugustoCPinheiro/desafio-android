@@ -14,7 +14,7 @@ import okhttp3.mockwebserver.RecordedRequest
 import org.junit.Test
 
 
-class MainActivityTest {
+class ContactsActivityTest {
 
     private val server = MockWebServer()
 
@@ -22,7 +22,7 @@ class MainActivityTest {
 
     @Test
     fun shouldDisplayTitle() {
-        launchActivity<MainActivity>().apply {
+        launchActivity<ContactsActivity>().apply {
             val expectedTitle = context.getString(R.string.title)
 
             moveToState(Lifecycle.State.RESUMED)
