@@ -1,17 +1,16 @@
 package com.picpay.desafio.android.model
 
-import android.os.Parcelable
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.google.gson.annotations.SerializedName
-import kotlinx.parcelize.Parcelize
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 
 
-@Parcelize
+@JsonClass(generateAdapter = true)
 @Entity(tableName = "user")
 data class User(
-    @SerializedName("img") val img: String,
-    @SerializedName("name") val name: String,
-    @SerializedName("id") @PrimaryKey val id: Int,
-    @SerializedName("username") val username: String
-) : Parcelable
+    @Json(name = "img") val img: String,
+    @Json(name = "name") val name: String,
+    @Json(name = "id") @PrimaryKey val id: Int,
+    @Json(name = "username") val username: String
+)

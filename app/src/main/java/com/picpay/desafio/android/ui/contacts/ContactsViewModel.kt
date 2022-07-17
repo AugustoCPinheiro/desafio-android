@@ -5,10 +5,14 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.picpay.desafio.android.business.GetContactsUseCase
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 
-class ContactsViewModel(private val getContactsUseCase: GetContactsUseCase) : ViewModel() {
+class ContactsViewModel(
+    private val getContactsUseCase: GetContactsUseCase,
+    private val defaultDispatcher: CoroutineDispatcher
+) : ViewModel() {
     private val _contactsState: MutableLiveData<ContactsState> by lazy {
         MutableLiveData<ContactsState>()
     }
@@ -20,7 +24,7 @@ class ContactsViewModel(private val getContactsUseCase: GetContactsUseCase) : Vi
     }
 
     private fun getUsers() {
-        viewModelScope.launch {
+        viewModelScope.launch(defaultDispatcher) {
             getContactsUseCase()
                 .onStart { _contactsState.value = ContactsState.Loading }
                 .collect {

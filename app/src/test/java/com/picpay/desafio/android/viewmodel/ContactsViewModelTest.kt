@@ -1,25 +1,33 @@
 package com.picpay.desafio.android.viewmodel
 
-import com.nhaarman.mockitokotlin2.mock
-import com.picpay.desafio.android.business.ContactsBusiness
-import com.picpay.desafio.android.ui.contacts.ContactsState
+import com.picpay.desafio.android.business.GetContactsUseCase
 import com.picpay.desafio.android.ui.contacts.ContactsViewModel
+import io.mockk.mockk
+import io.mockk.verify
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.TestDispatcher
+import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Test
-import kotlin.test.assertEquals
 
 class ContactsViewModelTest {
 
-    private val mockContactsBusiness = mock<ContactsBusiness>()
+    private val mockGetContactsUseCase = mockk<GetContactsUseCase>(relaxed = true)
+
     private lateinit var viewModel: ContactsViewModel
 
     @Before
     fun setup() {
-        viewModel = ContactsViewModel(mockContactsBusiness)
+        viewModel = ContactsViewModel(mockGetContactsUseCase, StandardTestDispatcher())
     }
 
     @Test
-    fun whenInitialized_shouldHaveInitState() {
-        assertEquals(ContactsState.Loading, viewModel.contactsState.value)
+    fun whenInitialized_ShouldCallUseCase() = runTest {
+        delay(1000)
+        verify(exactly = 1) {
+
+            mockGetContactsUseCase()
+        }
     }
 }

@@ -18,5 +18,5 @@ val contactsModule = module {
     factory<GetContactsUseCase> { GetContactsUseCaseImpl(get(), get(), Dispatchers.IO) }
     single { AppDatabase.createDatabase(androidContext()) }
     single { get<AppDatabase>().userDao() }
-    viewModel { ContactsViewModel(get()) }
+    viewModel { ContactsViewModel(get(), Dispatchers.Main) }
 }
