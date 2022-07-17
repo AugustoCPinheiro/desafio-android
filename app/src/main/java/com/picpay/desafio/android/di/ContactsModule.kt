@@ -1,6 +1,7 @@
 package com.picpay.desafio.android.di
 
-import com.picpay.desafio.android.business.ContactsBusiness
+import com.picpay.desafio.android.business.GetContactsUseCase
+import com.picpay.desafio.android.business.GetContactsUseCaseImpl
 import com.picpay.desafio.android.repository.ContactsRemoteRepository
 import com.picpay.desafio.android.repository.ContactsRemoteRepositoryImpl
 import com.picpay.desafio.android.repository.db.AppDatabase
@@ -14,7 +15,8 @@ import org.koin.dsl.module
 val contactsModule = module {
     single { PicPayService.create() }
     single<ContactsRemoteRepository> { ContactsRemoteRepositoryImpl(get()) }
-    single { ContactsBusiness(get(), get(), Dispatchers.IO) }
+    factory<GetContactsUseCase> { GetContactsUseCaseImpl(get(), get(), Dispatchers.IO) }
     single { AppDatabase.createDatabase(androidContext()) }
+    single { get<AppDatabase>().userDao() }
     viewModel { ContactsViewModel(get()) }
 }

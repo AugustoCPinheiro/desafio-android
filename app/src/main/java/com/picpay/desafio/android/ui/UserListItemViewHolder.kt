@@ -9,9 +9,8 @@ import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
 
 class UserListItemViewHolder(
-    itemView: View
-) : RecyclerView.ViewHolder(itemView) {
-    val binding by lazy { ListItemUserBinding.bind(itemView) }
+    private val binding: ListItemUserBinding
+) : RecyclerView.ViewHolder(binding.root) {
 
     fun bind(user: User) {
         binding.name.text = user.name

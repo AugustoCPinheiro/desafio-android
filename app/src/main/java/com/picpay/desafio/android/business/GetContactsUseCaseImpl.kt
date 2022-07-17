@@ -2,24 +2,27 @@ package com.picpay.desafio.android.business
 
 import com.picpay.desafio.android.model.User
 import com.picpay.desafio.android.repository.ContactsRemoteRepository
-import com.picpay.desafio.android.repository.db.AppDatabase
-import kotlinx.coroutines.*
+import com.picpay.desafio.android.repository.db.UserDao
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
-import kotlin.coroutines.coroutineContext
+import kotlinx.coroutines.launch
 
-class ContactsBusiness(
+class GetContactsUseCaseImpl(
     private val repository: ContactsRemoteRepository,
-    private val database: AppDatabase,
+    private val userDao: UserDao,
     private val dispatcher: CoroutineDispatcher
-) {
-    suspend fun getUsers(): Flow<List<User>> = flow {
+) : GetContactsUseCase {
+
+    override fun invoke(): Flow<List<User>> = flow {
         val result = repository.getUsers()
+
         if (result.isSuccessful) {
             val users = result.body()!!
             coroutineScope {
                 launch(dispatcher) {
-                    database.userDao().insertAll(*users.toTypedArray())
+                    userDao.insertAll(*users.toTypedArray())
                 }
             }
             emit(users)
