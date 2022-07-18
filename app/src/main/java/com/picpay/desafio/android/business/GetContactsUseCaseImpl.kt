@@ -29,7 +29,7 @@ class GetContactsUseCaseImpl(
         if (result.isSuccessful) {
             val users = result.body()!!
             coroutineScope {
-                launch(dispatcher) {
+                launch {
                     userDao.insertAll(*users.toTypedArray())
                 }
             }
