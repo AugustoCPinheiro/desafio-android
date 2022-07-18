@@ -7,6 +7,7 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
 
 class GetContactsUseCaseImpl(
@@ -16,7 +17,14 @@ class GetContactsUseCaseImpl(
 ) : GetContactsUseCase {
 
     override fun invoke(): Flow<List<User>> = flow {
+
+        val cache = userDao.getAll()
+        if (cache.isNotEmpty()) {
+            emit(cache)
+        }
+
         val result = repository.getUsers()
+
 
         if (result.isSuccessful) {
             val users = result.body()!!
@@ -29,5 +37,7 @@ class GetContactsUseCaseImpl(
         } else {
             emit(listOf())
         }
-    }
+
+
+    }.flowOn(dispatcher)
 }
