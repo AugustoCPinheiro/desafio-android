@@ -5,7 +5,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.picpay.desafio.android.R
 import com.picpay.desafio.android.databinding.ActivityContactsBinding
-import com.picpay.desafio.android.ui.UserListAdapter
+import com.picpay.desafio.android.ui.ContactListAdapter
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class ContactsActivity : AppCompatActivity(R.layout.activity_contacts) {
@@ -17,13 +17,13 @@ class ContactsActivity : AppCompatActivity(R.layout.activity_contacts) {
     }
     private val viewModel: ContactsViewModel by viewModel()
 
-    private lateinit var adapter: UserListAdapter
+    private lateinit var adapter: ContactListAdapter
 
     override fun onResume() {
         super.onResume()
         setContentView(binding.root)
 
-        adapter = UserListAdapter()
+        adapter = ContactListAdapter()
         binding.recyclerView.adapter = adapter
 
         bindListeners()

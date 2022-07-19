@@ -8,7 +8,7 @@ import com.picpay.desafio.android.model.User
 import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
 
-class UserListItemViewHolder(
+class ContactListItemViewHolder(
     private val binding: ListItemUserBinding
 ) : RecyclerView.ViewHolder(binding.root) {
 

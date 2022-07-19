@@ -1,6 +1,7 @@
 package com.picpay.desafio.android.business
 
 import com.picpay.desafio.android.model.User
+import com.picpay.desafio.android.repository.ContactsLocalRepository
 import com.picpay.desafio.android.repository.ContactsRemoteRepository
 import com.picpay.desafio.android.repository.db.UserDao
 import io.mockk.coEvery
@@ -21,7 +22,7 @@ import kotlin.test.assertTrue
 
 class GetContactsUseCaseTest {
 
-    private val mockUserDao = mockk<UserDao>()
+    private val mockLocalRepository = mockk<ContactsLocalRepository>()
     private val mockRepository = mockk<ContactsRemoteRepository>()
 
     private lateinit var useCase: GetContactsUseCase
@@ -30,14 +31,14 @@ class GetContactsUseCaseTest {
 
     @Before
     fun setup() {
-        useCase = GetContactsUseCaseImpl(mockRepository, mockUserDao, testDispatcher)
+        useCase = GetContactsUseCaseImpl(mockRepository, mockLocalRepository, testDispatcher)
     }
 
     @Test
     fun shouldNotEmitCache_whenDatabaseIsEmpty() = runTest(testDispatcher) {
-        every { mockUserDao.getAll() } returns listOf()
+        every { mockLocalRepository.getContacts() } returns listOf()
         coEvery { mockRepository.getUsers() } returns successResponseMock
-        every { mockUserDao.insertAll(*anyVararg()) } answers { nothing }
+        every { mockLocalRepository.saveContacts(any()) } answers { nothing }
 
         val caseFlow = useCase()
 
@@ -51,9 +52,9 @@ class GetContactsUseCaseTest {
 
     @Test
     fun shouldEmitCache_thenRemoteAnswer_whenDatabaseIsPopulated() = runTest(testDispatcher) {
-        every { mockUserDao.getAll() } returns mockSuccessListTwo
+        every { mockLocalRepository.getContacts() } returns mockSuccessListTwo
         coEvery { mockRepository.getUsers() } returns successResponseMock
-        every { mockUserDao.insertAll(*anyVararg()) } answers { nothing }
+        every { mockLocalRepository.saveContacts(any()) } answers { nothing }
 
         val caseFlow = useCase()
 
@@ -70,9 +71,9 @@ class GetContactsUseCaseTest {
 
     @Test
     fun shouldEmitEmptyList_whenRemoteAnswer_isNotSuccessful() = runTest(testDispatcher) {
-        every { mockUserDao.getAll() } returns listOf()
+        every { mockLocalRepository.getContacts() } returns listOf()
         coEvery { mockRepository.getUsers() } returns errorResponseMock
-        every { mockUserDao.insertAll(*anyVararg()) } answers { nothing }
+        every { mockLocalRepository.saveContacts(any()) } answers { nothing }
 
         val caseFlow = useCase()
         runCurrent()
