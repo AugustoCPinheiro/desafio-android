@@ -1,4 +1,4 @@
-package com.picpay.desafio.android.repository.db
+package com.picpay.desafio.android.datasource.db
 
 import androidx.room.Dao
 import androidx.room.Insert

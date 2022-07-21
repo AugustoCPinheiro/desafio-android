@@ -1,7 +1,7 @@
 package com.picpay.desafio.android.repository
 
 import com.picpay.desafio.android.model.User
-import com.picpay.desafio.android.repository.service.PicPayService
+import com.picpay.desafio.android.datasource.service.PicPayService
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.runBlocking
@@ -16,11 +16,11 @@ class ContactsRemoteRepositoryTest {
 
     private val mockService = mockk<PicPayService>()
 
-    private lateinit var repository: ContactsRemoteRepository
+    private lateinit var repository: ContactsRepository
 
     @Before
     fun setup() {
-        repository = ContactsRemoteRepositoryImpl(mockService)
+        repository = ContactsRepositoryImpl(mockService)
     }
 
     @Test

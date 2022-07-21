@@ -6,12 +6,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.picpay.desafio.android.business.GetContactsUseCase
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 
 class ContactsViewModel(
     private val getContactsUseCase: GetContactsUseCase,
-    private val defaultDispatcher: CoroutineDispatcher
+    private val defaultDispatcher: CoroutineDispatcher = Dispatchers.Main
 ) : ViewModel() {
     private val _contactsState: MutableLiveData<ContactsState> by lazy {
         MutableLiveData<ContactsState>()

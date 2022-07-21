@@ -1,7 +1,7 @@
 package com.picpay.desafio.android.repository
 
 import com.picpay.desafio.android.model.User
-import com.picpay.desafio.android.repository.db.UserDao
+import com.picpay.desafio.android.datasource.db.UserDao
 import io.mockk.every
 import io.mockk.mockk
 import org.junit.Before

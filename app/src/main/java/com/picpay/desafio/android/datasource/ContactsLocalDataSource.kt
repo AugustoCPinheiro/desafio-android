@@ -1,8 +1,8 @@
-package com.picpay.desafio.android.repository
+package com.picpay.desafio.android.datasource
 
 import com.picpay.desafio.android.model.User
 
-interface ContactsLocalRepository {
+interface ContactsLocalDataSource {
     fun saveContacts(contacts: List<User>)
     fun getContacts(): List<User>
 }

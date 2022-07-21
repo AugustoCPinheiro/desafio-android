@@ -1,9 +1,9 @@
-package com.picpay.desafio.android.repository
+package com.picpay.desafio.android.datasource
 
+import com.picpay.desafio.android.datasource.db.UserDao
 import com.picpay.desafio.android.model.User
-import com.picpay.desafio.android.repository.db.UserDao
 
-class ContactsLocalRepositoryImpl(private val userDao: UserDao) : ContactsLocalRepository {
+class ContactsLocalDataSourceImpl(private val userDao: UserDao) : ContactsLocalDataSource {
     override fun saveContacts(contacts: List<User>) {
         userDao.insertAll(*contacts.toTypedArray())
     }

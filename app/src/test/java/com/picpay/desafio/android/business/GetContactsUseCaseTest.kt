@@ -1,9 +1,7 @@
 package com.picpay.desafio.android.business
 
 import com.picpay.desafio.android.model.User
-import com.picpay.desafio.android.repository.ContactsLocalRepository
-import com.picpay.desafio.android.repository.ContactsRemoteRepository
-import com.picpay.desafio.android.repository.db.UserDao
+import com.picpay.desafio.android.repository.ContactsRepository
 import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
@@ -23,7 +21,7 @@ import kotlin.test.assertTrue
 class GetContactsUseCaseTest {
 
     private val mockLocalRepository = mockk<ContactsLocalRepository>()
-    private val mockRepository = mockk<ContactsRemoteRepository>()
+    private val mockRepository = mockk<ContactsRepository>()
 
     private lateinit var useCase: GetContactsUseCase
 

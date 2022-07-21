@@ -2,12 +2,14 @@ package com.picpay.desafio.android.di
 
 import com.picpay.desafio.android.business.GetContactsUseCase
 import com.picpay.desafio.android.business.GetContactsUseCaseImpl
-import com.picpay.desafio.android.repository.ContactsLocalRepository
-import com.picpay.desafio.android.repository.ContactsLocalRepositoryImpl
-import com.picpay.desafio.android.repository.ContactsRemoteRepository
-import com.picpay.desafio.android.repository.ContactsRemoteRepositoryImpl
-import com.picpay.desafio.android.repository.db.AppDatabase
-import com.picpay.desafio.android.repository.service.PicPayService
+import com.picpay.desafio.android.datasource.ContactsLocalDataSource
+import com.picpay.desafio.android.datasource.ContactsLocalDataSourceImpl
+import com.picpay.desafio.android.datasource.ContactsRemoteDataSource
+import com.picpay.desafio.android.datasource.ContactsRemoteDataSourceImpl
+import com.picpay.desafio.android.repository.ContactsRepository
+import com.picpay.desafio.android.repository.ContactsRepositoryImpl
+import com.picpay.desafio.android.datasource.db.AppDatabase
+import com.picpay.desafio.android.datasource.service.PicPayService
 import com.picpay.desafio.android.ui.contacts.ContactsViewModel
 import kotlinx.coroutines.Dispatchers
 import org.koin.android.ext.koin.androidContext
@@ -19,12 +21,15 @@ val serviceModule = module {
 }
 
 val repositoryModule = module {
-    single<ContactsRemoteRepository> { ContactsRemoteRepositoryImpl(get()) }
-    single<ContactsLocalRepository> { ContactsLocalRepositoryImpl(get()) }
+    single<ContactsRepository> { ContactsRepositoryImpl(get(), get()) }
 }
 
+val dataSourceModule = module {
+    single<ContactsRemoteDataSource> { ContactsRemoteDataSourceImpl(get()) }
+    single<ContactsLocalDataSource> { ContactsLocalDataSourceImpl(get()) }
+}
 val businessModule = module {
-    factory<GetContactsUseCase> { GetContactsUseCaseImpl(get(), get(), Dispatchers.IO) }
+    factory<GetContactsUseCase> { GetContactsUseCaseImpl(get()) }
 }
 
 val databaseModule = module {
@@ -33,8 +38,8 @@ val databaseModule = module {
 }
 
 val viewModelModule = module {
-    viewModel { ContactsViewModel(get(), Dispatchers.Main) }
+    viewModel { ContactsViewModel(get()) }
 }
 
 val contactsModule =
-    serviceModule + repositoryModule + businessModule + databaseModule + viewModelModule
+    serviceModule + repositoryModule + businessModule + databaseModule + viewModelModule + dataSourceModule
