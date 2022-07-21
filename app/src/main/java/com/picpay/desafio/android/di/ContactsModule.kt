@@ -1,7 +1,6 @@
 package com.picpay.desafio.android.di
 
 import com.picpay.desafio.android.business.GetContactsUseCase
-import com.picpay.desafio.android.business.GetContactsUseCaseImpl
 import com.picpay.desafio.android.datasource.ContactsLocalDataSource
 import com.picpay.desafio.android.datasource.ContactsLocalDataSourceImpl
 import com.picpay.desafio.android.datasource.ContactsRemoteDataSource
@@ -11,7 +10,6 @@ import com.picpay.desafio.android.repository.ContactsRepositoryImpl
 import com.picpay.desafio.android.datasource.db.AppDatabase
 import com.picpay.desafio.android.datasource.service.PicPayService
 import com.picpay.desafio.android.ui.contacts.ContactsViewModel
-import kotlinx.coroutines.Dispatchers
 import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
@@ -29,7 +27,7 @@ val dataSourceModule = module {
     single<ContactsLocalDataSource> { ContactsLocalDataSourceImpl(get()) }
 }
 val businessModule = module {
-    factory<GetContactsUseCase> { GetContactsUseCaseImpl(get()) }
+    factory { GetContactsUseCase(get()) }
 }
 
 val databaseModule = module {

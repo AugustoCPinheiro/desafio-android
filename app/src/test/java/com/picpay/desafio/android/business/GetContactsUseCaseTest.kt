@@ -3,21 +3,14 @@ package com.picpay.desafio.android.business
 import com.picpay.desafio.android.model.User
 import com.picpay.desafio.android.repository.ContactsRepository
 import io.mockk.coEvery
-import io.mockk.every
 import io.mockk.mockk
-import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
-import okhttp3.MediaType.Companion.toMediaTypeOrNull
-import okhttp3.ResponseBody.Companion.toResponseBody
 import org.junit.Before
 import org.junit.Test
-import retrofit2.Response
 import kotlin.test.assertEquals
-import kotlin.test.assertTrue
 
 class GetContactsUseCaseTest {
 
@@ -30,7 +23,7 @@ class GetContactsUseCaseTest {
 
     @Before
     fun setup() {
-        useCase = GetContactsUseCaseImpl(mockRepository)
+        useCase = GetContactsUseCase(mockRepository)
     }
 
     @Test
