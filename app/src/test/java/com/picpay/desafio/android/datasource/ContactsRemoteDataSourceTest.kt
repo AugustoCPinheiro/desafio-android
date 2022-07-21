@@ -1,7 +1,9 @@
-package com.picpay.desafio.android.repository
+package com.picpay.desafio.android.datasource
 
-import com.picpay.desafio.android.model.User
 import com.picpay.desafio.android.datasource.service.PicPayService
+import com.picpay.desafio.android.model.User
+import com.picpay.desafio.android.repository.ContactsRepository
+import com.picpay.desafio.android.repository.ContactsRepositoryImpl
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.runBlocking
@@ -12,22 +14,21 @@ import org.junit.Test
 import retrofit2.Response
 import kotlin.test.assertEquals
 
-class ContactsRemoteRepositoryTest {
-
+class ContactsRemoteDataSourceTest {
     private val mockService = mockk<PicPayService>()
 
-    private lateinit var repository: ContactsRepository
+    private lateinit var mockDataSource: ContactsRemoteDataSource
 
     @Before
     fun setup() {
-        repository = ContactsRepositoryImpl(mockService)
+        mockDataSource = ContactsRemoteDataSourceImpl(mockService)
     }
 
     @Test
     fun whenServiceReturnsSuccess_shouldPassOn() = runBlocking {
         coEvery { mockService.getUsers() } returns mockSuccessResponse
 
-        val result = repository.getUsers()
+        val result = mockDataSource.getUsers()
 
         assertEquals(mockSuccessResponse, result)
     }
@@ -36,7 +37,7 @@ class ContactsRemoteRepositoryTest {
     fun whenServiceReturnsError_shouldPassOn() = runBlocking {
         coEvery { mockService.getUsers() } returns mockErrorResponse
 
-        val result = repository.getUsers()
+        val result = mockDataSource.getUsers()
 
         assertEquals(mockErrorResponse, result)
     }

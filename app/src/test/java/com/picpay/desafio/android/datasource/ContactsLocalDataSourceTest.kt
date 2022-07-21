@@ -1,24 +1,22 @@
-package com.picpay.desafio.android.repository
+package com.picpay.desafio.android.datasource
 
-import com.picpay.desafio.android.model.User
 import com.picpay.desafio.android.datasource.db.UserDao
+import com.picpay.desafio.android.model.User
 import io.mockk.every
 import io.mockk.mockk
 import org.junit.Before
 import org.junit.Test
 import kotlin.test.assertEquals
 
-
-class ContactsLocalRepositoryTest {
-
+class ContactsLocalDataSourceTest {
     private val mockUserDao = mockk<UserDao>()
 
-    private lateinit var repository: ContactsLocalRepository
+    private lateinit var mockDataSource: ContactsLocalDataSource
 
 
     @Before
     fun setup() {
-        repository = ContactsLocalRepositoryImpl(mockUserDao)
+        mockDataSource = ContactsLocalDataSourceImpl(mockUserDao)
     }
 
     @Test
@@ -26,7 +24,7 @@ class ContactsLocalRepositoryTest {
         every { mockUserDao.getAll() } returns mockCachedList
         every { mockUserDao.insertAll(*anyVararg()) } answers { nothing }
 
-        val result = repository.getContacts()
+        val result = mockDataSource.getContacts()
 
         assertEquals(mockCachedList, result)
     }
