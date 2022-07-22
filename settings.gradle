@@ -1,1 +1,5 @@
 include ':app'
+include ':core-entity'
+include ':core-network'
+include ':core-database'
+include ':contacts'

@@ -6,24 +6,18 @@ plugins {
 }
 
 android {
-    compileSdkVersion 31
-
-    viewBinding {
-        enabled = true
-    }
+    compileSdkVersion 32
 
     defaultConfig {
         applicationId "com.picpay.desafio.android"
         minSdkVersion 21
-        targetSdkVersion 31
+        targetSdkVersion 32
         versionCode 1
         versionName "1.0"
 
         vectorDrawables.useSupportLibrary = true
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-
-        buildConfigField "String", 'BASE_URL', '"https://609a908e0f5a13001721b74e.mockapi.io/picpay/api/"'
     }
     buildTypes {
         debug {}
@@ -48,6 +42,12 @@ android {
 }
 
 dependencies {
+
+    implementation project(":core-entity")
+    implementation project(":core-network")
+    implementation project(":core-database")
+    implementation project(":contacts")
+
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
@@ -73,21 +73,9 @@ dependencies {
 
     implementation "com.squareup.moshi:moshi:$moshi_version"
     kapt "com.squareup.moshi:moshi-kotlin-codegen:$moshi_version"
-    implementation "com.squareup.retrofit2:converter-moshi:2.9.0"
-
-    implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
-    implementation "com.squareup.retrofit2:adapter-rxjava2:$retrofit_version"
-    implementation "com.squareup.okhttp3:mockwebserver:$okhttp_version"
-
-    implementation "com.squareup.picasso:picasso:$picasso_version"
-    implementation "de.hdodenhof:circleimageview:$circleimageview_version"
 
     testImplementation "junit:junit:$junit_version"
     testImplementation "androidx.arch.core:core-testing:$core_testing_version"
-
-
-    implementation "androidx.room:room-runtime:$room_version"
-    kapt "androidx.room:room-compiler:$room_version"
 
     testImplementation "io.mockk:mockk:$mockk_version"
     androidTestImplementation "io.mockk:mockk-android:$mockk_version"
