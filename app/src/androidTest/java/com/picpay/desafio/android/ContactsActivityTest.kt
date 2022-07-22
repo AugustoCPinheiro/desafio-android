@@ -1,25 +1,54 @@
 package com.picpay.desafio.android
 
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.MutableLiveData
 import androidx.test.core.app.launchActivity
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
-import androidx.test.espresso.matcher.ViewMatchers.withText
+import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.platform.app.InstrumentationRegistry
+import com.picpay.desafio.android.RecyclerViewMatchers.atPosition
+import com.picpay.desafio.android.model.User
 import com.picpay.desafio.android.ui.contacts.ContactsActivity
+import com.picpay.desafio.android.ui.contacts.ContactsState
+import com.picpay.desafio.android.ui.contacts.ContactsViewModel
+import io.mockk.every
+import io.mockk.mockk
 import okhttp3.mockwebserver.Dispatcher
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
 import okhttp3.mockwebserver.RecordedRequest
+import org.junit.After
+import org.junit.Before
 import org.junit.Test
+import org.koin.androidx.viewmodel.dsl.viewModel
+import org.koin.core.context.startKoin
+import org.koin.core.context.stopKoin
+import org.koin.dsl.module
 
 
 class ContactsActivityTest {
-
-    private val server = MockWebServer()
-
     private val context = InstrumentationRegistry.getInstrumentation().targetContext
+
+    private val mockLiveData = MutableLiveData<ContactsState>()
+
+    private val mockViewModel = mockk<ContactsViewModel>(relaxed = true)
+
+    @After
+    fun teardown() {
+        stopKoin()
+    }
+
+    @Before
+    fun setup() {
+        startKoin {
+            modules(module {
+                viewModel { mockViewModel }
+            })
+        }
+
+        every { mockViewModel.contactsState }.returns(mockLiveData)
+    }
 
     @Test
     fun shouldDisplayTitle() {
@@ -34,36 +63,32 @@ class ContactsActivityTest {
 
     @Test
     fun shouldDisplayListItem() {
-        server.dispatcher = object : Dispatcher() {
-            override fun dispatch(request: RecordedRequest): MockResponse {
-                return when (request.path) {
-                    "/users" -> successResponse
-                    else -> errorResponse
-                }
-            }
-        }
-
-        server.start(serverPort)
-
+        mockLiveData.postValue(
+            ContactsState.Success(
+                mockSuccessResponse
+            )
+        )
         launchActivity<ContactsActivity>().apply {
-            // TODO("validate if list displays items returned by server")
+            onView(withId(R.id.recyclerView)).check(
+                matches(
+                    atPosition(
+                        0,
+                        hasDescendant(withText("@eduardo.santos"))
+                    )
+                )
+            )
         }
 
-        server.close()
     }
 
     companion object {
-        private const val serverPort = 8080
-
-        private val successResponse by lazy {
-            val body =
-                "[{\"id\":1001,\"name\":\"Eduardo Santos\",\"img\":\"https://randomuser.me/api/portraits/men/9.jpg\",\"username\":\"@eduardo.santos\"}]"
-
-            MockResponse()
-                .setResponseCode(200)
-                .setBody(body)
-        }
-
-        private val errorResponse by lazy { MockResponse().setResponseCode(404) }
+        val mockSuccessResponse = listOf(
+            User(
+                "https://randomuser.me/api/portraits/men/9.jpg",
+                "Eduardo Santos",
+                0,
+                "@eduardo.santos"
+            )
+        )
     }
 }

@@ -25,7 +25,7 @@ buildscript {
         coroutines_version = "1.6.4"
         core_ktx_test_version = "1.4.0"
         room_version = "2.4.1"
-        mockk_version = "1.12.4"
+        mockk_version = "1.12.3"
         coroutines_test_version = "1.6.4"
         moshi_version = "1.13.0"
     }
